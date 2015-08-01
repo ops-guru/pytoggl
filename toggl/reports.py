@@ -16,7 +16,12 @@ class Node(object):
             else:
                 return v
 
-        for k, v in attribs.iteritems():
+        try:
+            iteritems = dict.items # Python 3
+        except AttributeError:
+            iteritems = dict.iteritems # Python 2
+
+        for k, v in iteritems(attribs):
             if isinstance(v, list):
                 attribs[k] = [parse_val(el) for el in v]
             elif isinstance(v, dict):
@@ -68,7 +73,12 @@ class Reports(object):
                 raise ValueError('missing workspace ID')
             workspace_id = self.workspace_id
 
-        for k, v in params.iteritems():
+        try:
+            iteritems = dict.items # Python 3
+        except AttributeError:
+            iteritems = dict.iteritems # Python 2
+
+        for k, v in iteritems(params):
             if isinstance(v, datetime) or isinstance(v, date):
                 params[k] = v.strftime('%Y-%m-%d')
 

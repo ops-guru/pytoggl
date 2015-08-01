@@ -1,5 +1,8 @@
 import requests
-from urllib import urlencode
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 import logging
 import json
 

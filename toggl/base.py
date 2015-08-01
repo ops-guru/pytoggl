@@ -60,7 +60,12 @@ class Object(object):
         self._update_attrs(kwargs)
 
     def _update_attrs(self, attrs):
-        for k, v in attrs.iteritems():
+        try:
+            iteritems = dict.items # Python 3
+        except AttributeError:
+            iteritems = dict.iteritems # Python 2
+
+        for k, v in iteritems(attrs):
             try:
                 v = iso8601.parse_date(v)
                 attrs[k] = v
