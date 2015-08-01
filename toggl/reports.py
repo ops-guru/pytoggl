@@ -2,6 +2,8 @@ from datetime import datetime, date
 
 from .session import Session
 
+import sys
+
 __all__ = ['Reports']
 
 
@@ -28,24 +30,24 @@ class Node(object):
                 attribs[k] = parse_val(v)
         self.__dict__.update(attribs)
 
-    @property
-    def keys(self):
-        return self.__dict__.keys()
+    if sys.version_info[0] < 3:
+        @property
+        def keys(self):
+            return self.__dict__.keys()
 
-    def __unicode__(self):
-        if hasattr(self, '_unicode_value'):
-            if self._unicode_value is None:
-                return '(none)'
+    if sys.version_info[0] < 3:
+        def __unicode__(self):
+            if hasattr(self, '_unicode_value'):
+                if self._unicode_value is None:
+                    return '(none)'
+                else:
+                    return self._unicode_value
             else:
-                return self._unicode_value
-        else:
-            return super(Node, self).__unicode__()
+                return super(Node, self).__unicode__()
 
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __contains__(self, key):
-        return key in self.__dict__
+    if sys.version_info[0] < 3:
+        def __str__(self):
+            return self.__unicode__().encode('utf-8')
 
 
 class Reports(object):
@@ -85,8 +87,11 @@ class Reports(object):
         params['workspace_id'] = workspace_id
         params['user_agent'] = self.USER_AGENT
 
-        data = self.session.get(type, **params)
-        return Node(**data)
+        if sys.version_info[0] < 3:
+            data = self.session.get(type, **params)
+            return Node(**data)
+        else:
+            return self.session.get(type, **params)
 
     @classmethod
     def _get_totals(cls, data):
