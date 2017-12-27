@@ -8,6 +8,7 @@ class ProjectList(ObjectList):
 
     get_instance_cls = lambda self: Project
     url = 'projects'
+    url2 = 'projects'
 
 
 class Project(Object):
@@ -26,6 +27,12 @@ class Project(Object):
         from .task import TaskList
         return TaskList(self.api, url='projects/%d/tasks' % self.id)
 
+    def get_instance_url(self):
+        return 'projects'
+
+    def get_instance_data(self, data):
+        return {"project":data}
+
 
 class ProjectUserList(ObjectList):
     """A collection of Project-User mappings."""
@@ -42,3 +49,9 @@ class ProjectUser(Object):
     @cached_property
     def user(self):
         return self.api.workspaces[self.wid].users[self.uid]
+
+    def get_instance_url(self):
+        return 'projects'
+
+    def get_instance_data(self, data):
+        return {"project":data}

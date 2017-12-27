@@ -22,7 +22,14 @@ class Session(object):
         try:
             log.debug("[req]: %s?%s [data: %s]" % (self.base_url + url,
                 urlencode(kwargs.get('params', {})), kwargs.get('data')))
-            response = method(self.base_url + url, *args, **kwargs)
+            if method == self.session.post:
+                print("_exec", self.base_url + url, args, kwargs)
+                response = method(self.base_url + url, data=json.dumps(kwargs))
+                print("response", response.status_code, response.text)
+            else:
+                #print("_exec", self.base_url + url, args, kwargs)
+                response = method(self.base_url + url, *args, **kwargs)
+                #print("response", response.status_code, response.text)
             log.debug("[resp %d]: %s" % (response.status_code,
                 repr(response.text)))
         except Exception as ex:
@@ -42,10 +49,10 @@ class Session(object):
         return self._exec(self.session.get, url, params=params)
 
     def post(self, url, data):
-        return self._exec(self.session.post, url, data=json.dumps(data))
+        return self._exec(self.session.post, url, **data)
 
-    def put(self, url, data):
-        return self._exec(self.session.put, url, data=json.dumps(data))
+    #def put(self, url, data):
+        #return self._exec2(self.session.put, url, data=json.dumps(data))
 
     def delete(self, url):
         return self._exec(self.session.delete, url)

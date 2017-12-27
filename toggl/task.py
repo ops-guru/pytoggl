@@ -8,6 +8,7 @@ class TaskList(ObjectList):
 
     get_instance_cls = lambda self: Task
     url = 'tasks'
+    url2 = 'tasks'
 
 
 class Task(Object):
@@ -17,8 +18,14 @@ class Task(Object):
 
     """
 
-    def get_instance_url(self):
-        return 'tasks/%d' % self.id if self.id else 'tasks'
+#    def get_instance_url(self):
+#        return 'tasks/%d' % self.id if self.id else 'tasks'
 
-    def to_dict(self, attrs):
-        return {'task': attrs}
+#    def to_dict(self, attrs):
+#        return {'task': attrs}
+
+    def get_instance_url(self):
+        return 'tasks'
+
+    def get_instance_data(self, data):
+        return {"task":data}

@@ -8,6 +8,7 @@ class ClientList(ObjectList):
 
     get_instance_cls = lambda self: Client
     url = 'clients'
+    url2 = 'clients'
 
 
 class Client(Object):
@@ -16,6 +17,7 @@ class Client(Object):
     API doc: https://github.com/toggl/toggl_api_docs/blob/master/chapters/clients.md
 
     """
+
     @cached_property
     def workspace(self):
         return self.api.workspaces[self.wid]
@@ -26,3 +28,9 @@ class Client(Object):
 
         return ProjectList(self.api,
             url='clients/%d/projects' % self.id)
+
+    def get_instance_url(self):
+        return 'clients'
+
+    def get_instance_data(self, data):
+        return {"client":data}
