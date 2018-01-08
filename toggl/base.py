@@ -20,7 +20,6 @@ class ObjectList(object):
         return list(self)
 
     def __iter__(self):
-        ###print("\niter", type(self))
         if self.url is None:
             raise StopIteration
 
@@ -49,7 +48,7 @@ class ObjectList(object):
                 self._instance_cache[object_id] = \
                     self.get_instance_cls()(self.api, **data['data'])
             else:
-                raise IndexError("%s with id %d doesn't exist" %
+                raise IndexError("%s with id %d doesn't exist" % \
                     (self.get_instance_cls().__name__, object_id))
 
         return self._instance_cache[object_id]
@@ -58,7 +57,6 @@ class ObjectList(object):
         obj = self.get_instance_cls()(self.api, **kwargs)
         obj.save()
         self._instance_cache[obj.id] = obj
-        ###self._datalist.append(obj.to_dict(obj._serialize_attrs2(obj.__dict__))) # Add new object
         return obj
 
 
@@ -127,6 +125,9 @@ class Object(object):
 
     def to_dict(self, data):
         return data
+
+    def to_serialized_dict(self):
+        return self.to_dict(self._serialize_attrs(self.__dict__))
 
     def delete(self):
         url = self.get_instance_url()

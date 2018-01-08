@@ -23,13 +23,9 @@ class Session(object):
             log.debug("[req]: %s?%s [data: %s]" % (self.base_url + url,
                 urlencode(kwargs.get('params', {})), kwargs.get('data')))
             if method == self.session.post:
-                print("_exec", self.base_url + url, args, kwargs)
                 response = method(self.base_url + url, data=json.dumps(kwargs))
-                print("response", response.status_code, response.text)
             else:
-                #print("_exec", self.base_url + url, args, kwargs)
                 response = method(self.base_url + url, *args, **kwargs)
-                #print("response", response.status_code, response.text)
             log.debug("[resp %d]: %s" % (response.status_code,
                 repr(response.text)))
         except Exception as ex:
