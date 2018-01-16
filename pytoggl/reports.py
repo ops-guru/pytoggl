@@ -1,6 +1,7 @@
 from datetime import datetime, date
 
 from .session import Session
+from .version import __version__
 
 import sys
 
@@ -53,7 +54,7 @@ class Node(object):
 class Reports(object):
 
     BASE_URL = 'https://toggl.com/reports/api/v2/'
-    USER_AGENT = 'pytoggl/0.0; (info@dobarkod.hr)'
+    USER_AGENT = "pytoggl/{version}; (info@dobarkod.hr)".format(version=__version__)
     REPORT_TYPES = ('weekly', 'details', 'summary')
 
     def __init__(self, api_token):

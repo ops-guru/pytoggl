@@ -1,8 +1,9 @@
+import sys
 from datetime import datetime, timedelta, tzinfo
 from mock import Mock
 import pytest
 
-from toggl.base import ObjectList, Object, cached_property
+from pytoggl.base import ObjectList, Object, cached_property
 
 
 class MyTZ(tzinfo):
@@ -43,9 +44,14 @@ def test_object_constructor_parses_json_datetime():
 
 def test_object_string_methods_returns_name_attribute():
     o = MyObject(None, name='mr.foo')
-
     assert str(o) == 'mr.foo'
-    assert unicode(o) == u'mr.foo'
+
+
+@pytest.mark.skipif(sys.version_info > (3,0),
+                    reason="requires python < 3.0")
+def test_object_string_methods_returns_name_attribute():
+    o = MyObject(None, name='mr.foo')
+    assert o.__unicode__() == u'mr.foo'
 
 def test_object_init_constructs_attribs_from_kwargs():
     o = MyObject(None, a=1, b='foo')
@@ -99,6 +105,7 @@ def test_object_list_instance_retrieval_calls_get():
     api = Mock()
     api.session.get.return_value = {'data': {'id': 42, 'name': 'foo'}}
     li = MyObjectList(api, url='http://example.com/foo')
+    li.url2 = li.url
 
     el = li[42]
 
@@ -112,6 +119,7 @@ def test_object_list_caches_instances():
     api = Mock()
     api.session.get.return_value = {'data': {'id': 42, 'name': 'foo'}}
     li = MyObjectList(api, url='http://example.com/foo')
+    li.url2 = li.url
 
     li[42]
     li[42]

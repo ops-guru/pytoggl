@@ -1,6 +1,14 @@
-*.pyc
+*.py[co]
 __pycache__
 /build/
 /dist/
 /MANIFEST
 /.coverage
+/.cache/
+/.eggs/
+/.idea/
+/.tox/
+AUTHORS
+ChangeLog
+README
+*.egg-info

@@ -1,14 +1,27 @@
+import sys
 from datetime import date
 from mock import patch
 import pytest
 
-from toggl.reports import Node, Reports
+from pytoggl.reports import Node, Reports
 
 
-def test_node_construction_from_kwargs():
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="requires python >= 3.0")
+def test_node_construction_from_kwargs_without_keys():
     n = Node(a=1, b=2)
 
-    assert 'a' in n and 'b' in n
+    for k in ['a', 'b']:
+        assert hasattr(n, k)
+    assert n.a == 1
+    assert n.b == 2
+
+
+@pytest.mark.skipif(sys.version_info >= (3,0), reason="requires python < 3.0")
+def test_node_construction_from_kwargs_with_keys():
+    n = Node(a=1, b=2)
+
+    for k in ['a', 'b']:
+        assert hasattr(n, k)
     assert sorted(n.keys) == ['a', 'b']
     assert n.a == 1
     assert n.b == 2
@@ -27,18 +40,22 @@ def test_node_construction_with_subdict():
     assert n.a.b == 1
 
 
-@patch('toggl.reports.Session')
+@patch('pytoggl.reports.Session')
 def test_reports_request_with_workspace_specialization(Session):
     s = Session.return_value
-    s.get.return_value = {'id': 1}
+    obj = dict if sys.version_info < (3, 0) else Node
+    s.get.return_value = obj(id=1)
 
     r = Reports('api_token')
     r = r.for_workspace(42)
 
     n = r.weekly()
 
-    s.get.assert_called_once_with('weekly',
-        workspace_id=42, user_agent= Reports.USER_AGENT)
+    s.get.assert_called_once_with(
+        'weekly',
+        workspace_id=42,
+        user_agent=Reports.USER_AGENT
+    )
 
     assert n.id == 1
 
@@ -50,21 +67,22 @@ def test_reports_request_requires_workspace():
         r.details()
 
 
-@patch('toggl.reports.Session')
+@patch('pytoggl.reports.Session')
 def test_reports_request_without_workspace_specialization(Session):
     s = Session.return_value
-    s.get.return_value = {'id': 1}
-
+    obj = dict if sys.version_info < (3, 0) else Node
+    s.get.return_value = obj(id=1)
     r = Reports('api_token')
-
     n = r.weekly(workspace_id=42)
-
-    s.get.assert_called_once_with('weekly',
-        workspace_id=42, user_agent= Reports.USER_AGENT)
+    s.get.assert_called_once_with(
+        'weekly',
+        workspace_id=42,
+        user_agent=Reports.USER_AGENT
+    )
 
     assert n.id == 1
 
-@patch('toggl.reports.Session')
+@patch('pytoggl.reports.Session')
 def test_reports_request_serializes_datetime(Session):
     s = Session.return_value
     r = Reports('api_token')
@@ -76,14 +94,15 @@ def test_reports_request_serializes_datetime(Session):
         when='2001-01-31')
 
 
-@patch('toggl.reports.Session')
+@patch('pytoggl.reports.Session')
 def test_reports_summary_data_parsing(Session):
     s = Session.return_value
-    s.get.return_value = {
-        "total_grand": 42000,
-        "total_billable": 21000,
-        "total_currencies": [{"currency":"USD", "amount": 21000}],
-        "data": [{
+    obj = dict if sys.version_info < (3, 0) else Node
+    s.get.return_value = obj(
+        total_grand=42000,
+        total_billable=21000,
+        total_currencies=[{"currency":"USD", "amount": 21000}],
+        data=[{
             "id": 1,
             "title": {"client": "Someone"},
             "time": 42000,
@@ -96,7 +115,7 @@ def test_reports_summary_data_parsing(Session):
                 "rate": None
             }]
         }]
-    }
+    )
 
     r = Reports('api_token')
     data = r.summary(workspace_id=42)
