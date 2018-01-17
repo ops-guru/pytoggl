@@ -54,7 +54,7 @@ class Node(object):
 class Reports(object):
 
     BASE_URL = 'https://toggl.com/reports/api/v2/'
-    USER_AGENT = "pytoggl/{version}; (info@dobarkod.hr)".format(version=__version__)
+    USER_AGENT = "pytoggle/{version}; (info@dobarkod.hr)".format(version=__version__)
     REPORT_TYPES = ('weekly', 'details', 'summary')
 
     def __init__(self, api_token):
