@@ -1,6 +1,6 @@
 from mock import Mock
 
-from pytoggl.error import Error
+from pytoggle.error import Error
 
 
 def test_error_picks_up_message_and_serves_as_string_value():

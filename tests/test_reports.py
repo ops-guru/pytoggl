@@ -3,7 +3,7 @@ from datetime import date
 from mock import patch
 import pytest
 
-from pytoggl.reports import Node, Reports
+from pytoggle.reports import Node, Reports
 
 
 @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires python >= 3.0")
@@ -40,7 +40,7 @@ def test_node_construction_with_subdict():
     assert n.a.b == 1
 
 
-@patch('pytoggl.reports.Session')
+@patch('pytoggle.reports.Session')
 def test_reports_request_with_workspace_specialization(Session):
     s = Session.return_value
     obj = dict if sys.version_info < (3, 0) else Node
@@ -67,7 +67,7 @@ def test_reports_request_requires_workspace():
         r.details()
 
 
-@patch('pytoggl.reports.Session')
+@patch('pytoggle.reports.Session')
 def test_reports_request_without_workspace_specialization(Session):
     s = Session.return_value
     obj = dict if sys.version_info < (3, 0) else Node
@@ -82,7 +82,7 @@ def test_reports_request_without_workspace_specialization(Session):
 
     assert n.id == 1
 
-@patch('pytoggl.reports.Session')
+@patch('pytoggle.reports.Session')
 def test_reports_request_serializes_datetime(Session):
     s = Session.return_value
     r = Reports('api_token')
@@ -94,7 +94,7 @@ def test_reports_request_serializes_datetime(Session):
         when='2001-01-31')
 
 
-@patch('pytoggl.reports.Session')
+@patch('pytoggle.reports.Session')
 def test_reports_summary_data_parsing(Session):
     s = Session.return_value
     obj = dict if sys.version_info < (3, 0) else Node
