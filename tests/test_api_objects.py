@@ -1,13 +1,13 @@
 from mock import patch, MagicMock
 
-from pytoggl.api import Api
-from pytoggl.client import Client
-from pytoggl.project import Project, ProjectList, ProjectUser, ProjectUserList
-from pytoggl.user import UserList
-from pytoggl.workspace import Workspace
+from pytoggle.api import Api
+from pytoggle.client import Client
+from pytoggle.project import Project, ProjectList, ProjectUser, ProjectUserList
+from pytoggle.user import UserList
+from pytoggle.workspace import Workspace
 
 
-@patch('pytoggl.api.Session')
+@patch('pytoggle.api.Session')
 def test_api_setup(Session):
     Api('token')
 

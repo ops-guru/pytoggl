@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, tzinfo
 from mock import Mock
 import pytest
 
-from pytoggl.base import ObjectList, Object, cached_property
+from pytoggle.base import ObjectList, Object, cached_property
 
 
 class MyTZ(tzinfo):

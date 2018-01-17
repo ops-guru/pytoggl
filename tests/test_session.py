@@ -1,11 +1,11 @@
 from mock import Mock, patch
 import pytest
 
-from pytoggl.session import Session
-from pytoggl.error import Error
+from pytoggle.session import Session
+from pytoggle.error import Error
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_setup(requests):
     session = requests.Session.return_value
     session.headers = {}
@@ -18,7 +18,7 @@ def test_session_setup(requests):
     assert s.session == session
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_get_calls_requests_session_get(requests):
     session = requests.Session.return_value
     session.get.return_value = Mock(status_code=200)
@@ -36,7 +36,7 @@ def test_session_get_calls_requests_session_get(requests):
     assert resp == {}
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_get_throws_error_on_error_response(requests):
     session = requests.Session.return_value
     session.get.return_value = rv = Mock(status_code=400)
@@ -52,7 +52,7 @@ def test_session_get_throws_error_on_error_response(requests):
     assert e.value.message == 'invalid request'
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_get_throws_error_on_requets_error(requests):
     session = requests.Session.return_value
     session.get.side_effect = Exception('oh noez!')
@@ -66,7 +66,7 @@ def test_session_get_throws_error_on_requets_error(requests):
     assert e.value.message == 'oh noez!'
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_get_throws_error_on_non_json_response(requests):
     session = requests.Session.return_value
     session.get.return_value = Mock(status_code=200)
@@ -81,7 +81,7 @@ def test_session_get_throws_error_on_non_json_response(requests):
     assert e.value.message == 'not a json!'
 
 
-@patch('pytoggl.session.requests')
+@patch('pytoggle.session.requests')
 def test_session_post_sends_post_request(requests):
     session = requests.Session.return_value
     session.post.return_value = Mock(status_code=200)
